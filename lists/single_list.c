@@ -92,21 +92,18 @@ PtrToNode Find( ElementType X, List L )
 /* 插入元素X */
 void Insert( ElementType X, List L, Position P )
 {
-	PtrToNode tmpn = L;
-	
-	while( tmpn->Next != NULL && tmpn->Next != P)
-	{
-		tmpn = tmpn->Next;
-	}
-	
-	P = (Position)malloc(sizeof(struct Node));
-	if(P == NULL)
+	Position tmpm = NULL;
+
+	/* 无需再前驱结点，P就是 */
+	tmpm = (Position)malloc(sizeof(struct Node));
+	if(tmpm == NULL)
 	{
 		printf("malloc failed\n");
 		return;
 	}
-	P->Next = tmpn->Next;
-	tmpn->Next = P;
+	tmpm->Element = X;
+	tmpm->Next = P->Next;
+	P->Next = tmpm;
 }
 
 
@@ -131,10 +128,41 @@ void Delete( ElementType X, List L )
 	}
 }
 
+PtrToNode Header( List L )
+{
+	return L;
+}
+
+PtrToNode First( List L )
+{
+	return L->Next;
+}
+
+ElementType Retrieve( Position P )
+{
+	return P->Element;
+}
+
+void Print( List L )
+{
+	Position tmp = L;
+	int i = 0;
+	
+	/* 先走到下一个，再走到下一个元素，防止头节点被误处理 */
+	while(tmp->Next != NULL)
+	{
+		tmp = tmp->Next;
+		printf("Element%d: %d\n",i, tmp->Element);
+		i++;
+	}
+}
+
 int main(void)
 {
 	int ret = 0;
 	List L = NULL;
+	ElementType X1 = 2019;
+
 
 	if(( L = CreateList()) == NULL)
 	{
@@ -147,6 +175,9 @@ int main(void)
 	{
 		printf("It's an empty list\n");
 	}	
+
+	Insert( X1, L, (Position)L );
+	Print( L );
 
 	MakeEmpty(L);
 	
