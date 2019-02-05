@@ -22,10 +22,10 @@ typedef PtrToNode Position;
 List CreateList(void);
 List MakeEmpty( List L );
 int IsEmpty( List L );
-int IsLast( Position P, List L );
+int IsLast( Position P);
 PtrToNode Find( ElementType X, List L );
 void Insert( ElementType X, List L, Position P );
-void Delete( Position P, List L );
+void Delete( ElementType X, List L );
 PtrToNode Header( List L );
 PtrToNode First( List L );
 ElementType Retrieve( Position P );//检索
@@ -61,14 +61,14 @@ int IsEmpty( List L )
 }
 
 /* P是否是最后一个元素 */
-int IsLast( Position P, List L )
+int IsLast( Position P)
 {
 	return P->Next == NULL;
 }
 
 PtrToNode Find( ElementType X, List L )
 {
-	PtrToNode tmpn = NULL:
+	PtrToNode tmpn = NULL;
 	
 	/* no good
 	tmpn = L;
@@ -114,7 +114,7 @@ void Insert( ElementType X, List L, Position P )
 void Delete( ElementType X, List L )
 {
 	PtrToNode tmpn = L;
-	Position  tmpP = NULL:
+	Position  tmpP = NULL;
 	
 	/* 找出前驱结点 */
 	while( (tmpn->Next != NULL)&&((tmpn->Next)->Element != X) )
@@ -122,17 +122,13 @@ void Delete( ElementType X, List L )
 		tmpn = tmpn->Next;
 	}
 	
+	
 	if( !(IsLast(tmpn)) )
 	{
-		tmpP = (Position)malloc(sizeof(struct Node));
-		if(tmpP == NULL)
-		{
-			printf("malloc failed\n");
-			return; 
-		}
-		tmpP = tmpP
+		tmpP = tmpn->Next;
+		tmpn->Next = tmpP->Next;
+		free( tmpP );
 	}
-	
 }
 
 int main(void)
