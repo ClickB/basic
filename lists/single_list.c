@@ -148,7 +148,7 @@ void Print( List L )
 	Position tmp = L;
 	int i = 0;
 	
-	/* 先走到下一个，再走到下一个元素，防止头节点被误处理 */
+	/* 先走到下一个元素再打印，防止头节点被误处理 */
 	while(tmp->Next != NULL)
 	{
 		tmp = tmp->Next;
