@@ -19,8 +19,7 @@ typedef PtrToNode List;
 typedef PtrToNode Position;
 
 
-List CreateList(void);
-List MakeEmpty( List L );
+List CreateList( void );
 int IsEmpty( List L );
 int IsLast( Position P);
 PtrToNode Find( ElementType X, List L );
@@ -33,11 +32,11 @@ ElementType Retrieve( Position P );//检索
 #endif  /* _List_H */
 
 /* 创建空链表 */
-List CreateList(void)
+List CreateList( void )
 {
 	PtrToNode Head = NULL;
 	
-	Head =(PtrToNode)malloc(sizeof(struct Node));
+	Head =( PtrToNode)malloc(sizeof(struct Node) );
 	if(Head == NULL)
 	{
 		printf("malloc failed\n");
@@ -46,13 +45,25 @@ List CreateList(void)
 	return Head;	
 }
 
-/* 清空链表 */
-List MakeEmpty( List L )
+/* 删除链表 */
+void DeleteList( List L )
 {
-	free( L->Next );
-	memset( &(L -> Element), 0 ,sizeof(ElementType) );
-	return L;
+	/* 一个先缓存下一个元素地址，然后另一个删除当前元素 */
+	Position tmpa = NULL; 
+	Position tmpb = NULL;
+
+    tmpa = L->Next;
+	L->Next = NULL; // 必要
+	free( L );
+	while( tmpa != NULL )
+	{
+		tmpb = tmpa->Next;
+		free( tmpa );
+		tmpa = tmpb;
+	}
+	
 }
+
 
 /* 判断是否是空链表 int */
 int IsEmpty( List L )
@@ -61,7 +72,7 @@ int IsEmpty( List L )
 }
 
 /* P是否是最后一个元素 */
-int IsLast( Position P)
+int IsLast( Position P )
 {
 	return P->Next == NULL;
 }
@@ -149,10 +160,10 @@ void Print( List L )
 	int i = 0;
 	
 	/* 先走到下一个元素再打印，防止头节点被误处理 */
-	while(tmp->Next != NULL)
+	while( tmp->Next != NULL )
 	{
 		tmp = tmp->Next;
-		printf("Element%d: %d\n",i, tmp->Element);
+		printf( "Element%d: %d\n",i, tmp->Element );
 		i++;
 	}
 }
@@ -162,9 +173,9 @@ int main(void)
 	int ret = 0;
 	List L = NULL;
 	ElementType X1 = 2019;
+	Position tmpp = NULL;
 
-
-	if(( L = CreateList()) == NULL)
+	if( ( L = CreateList()) == NULL )
 	{
 		printf(" Create list failed\n");
 		return -1;
@@ -173,13 +184,28 @@ int main(void)
 
 	if( IsEmpty(L) )
 	{
-		printf("It's an empty list\n");
+		printf( "It's an empty list\n" );
 	}	
 
 	Insert( X1, L, (Position)L );
+	X1--;
+	Insert( X1, L, (Position)(L->Next) );
 	Print( L );
+	tmpp = Find(X1, L);
+	if(tmpp != NULL)
+	{
+		printf( "%d finded, position: %p\n", X1, tmpp );
+	}
 
-	MakeEmpty(L);
+	Delete( X1, L );
+	Print( L );
+	
+	DeleteList( L );
+	Print( L );
+	if( IsEmpty(L) )
+    {
+        printf( "It's an empty list\n" );
+    }
 	
 	return 0;
 }
