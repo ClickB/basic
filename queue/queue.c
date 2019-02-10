@@ -108,8 +108,34 @@ void Enqueue( ElementType X, Queue Q )
 	}
 }
 
-ElementType Front( Queue Q );
-void Dequeue( Queue Q );
+ElementType Front( Queue Q )
+{
+	return Q->Array[Q->Front];
+}
+
+void Dequeue( Queue Q )
+{
+	if( Q->Size > 0 )
+	{
+		Q->Front += 1;
+		Q->Size --;
+	}
+}
+
+void Print( Queue Q )
+{
+	int i;
+	int tmp = Q->Front;
+	
+	if( Q->Front <= Q->Rear )
+	{
+		for( i=0; i<Q->Size; i++ )
+		{
+			printf( "Array[%d]: %d\n", i+Q->Front, Q->Array[i+Q->Front] );
+		}
+	}
+}
+
 ElementType FrontAndDequeue( Queue Q );
 
 int main(void)
@@ -118,6 +144,14 @@ int main(void)
 	
 	q = CreateQueue( 10 );
 	
+	Enqueue( 1, q );
+	Enqueue( 2, q );
+	Enqueue( 3, q );
+	Enqueue( 4, q );
+	Enqueue( 5, q );
+	Dequeue( q );
+	Dequeue( q );
+	Print( q );
 	//Dequeue( q );
 
 	return 0;
